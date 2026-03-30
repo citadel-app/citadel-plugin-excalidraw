@@ -17,6 +17,8 @@
     "renderer": "dist/renderer.js",
     "authorUrl": "https://github.com/citadel-app",
     "verified": true,
+    "providesIpcs": [],
+    "sidecars": [],
     "permissions": [
       "@citadel-app/base:plugins.getPluginPath",
       "@citadel-app/base:fs.readFile",
