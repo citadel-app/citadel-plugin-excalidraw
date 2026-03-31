@@ -2,48 +2,33 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
-export default defineConfig({
-  plugins: [react()],
-  define: {
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
-  },
+const external = [
+  'react', 'react-dom', 'react/jsx-runtime', 'react-router-dom',
+  '@citadel-app/core', '@citadel-app/ui', '@citadel-app/sdk',
+  'lucide-react', '@radix-ui/react-dropdown-menu', '@radix-ui/react-slot', 'clsx', 'tailwind-merge',
+  'electron', '@electron-toolkit/utils', 'fs', 'fs-extra', 'path', 'os', 'http', 'net',
+  'child_process', 'util', 'events', 'stream', 'url', 'crypto', 'module', 'better-sqlite3', 'ws'
+];
 
-  build: {
-    outDir: 'dist',
-    lib: {
-      entry: {
-        renderer: path.resolve(__dirname, 'src/renderer/index.ts')
+export default defineConfig(({ mode }) => {
+  const isMain = mode === 'main';
+
+  return {
+    plugins: [react()],
+    build: {
+      outDir: 'dist',
+      emptyOutDir: isMain, // Only clear during main pass so renderer doesn't get wiped
+      lib: {
+        entry: path.resolve(__dirname, isMain ? 'src/main/index.ts' : 'src/renderer/index.ts'),
+        formats: ['cjs']
       },
-      formats: ['cjs', 'es']
-    },
-    rollupOptions: {
-      external: [
-        // React ecosystem (provided by host)
-        'react',
-        'react-dom',
-        'react/jsx-runtime',
-        'react-router-dom',
-
-        // Citadel host packages
-        '@citadel-app/core',
-        '@citadel-app/ui',
-        '@citadel-app/sdk',
-
-        // UI libraries (provided by host)
-        'lucide-react',
-        '@radix-ui/react-dropdown-menu',
-        '@radix-ui/react-slot',
-        'clsx',
-        'tailwind-merge'
-      ],
-      output: [
-        {
-          dir: 'dist',
-          format: 'cjs',
-          entryFileNames: '[name].js',
-          exports: 'named'
+      rollupOptions: {
+        external,
+        output: {
+          inlineDynamicImports: true,
+          entryFileNames: isMain ? 'main.js' : 'renderer.js'
         }
-      ]
+      }
     }
-  }
+  };
 });

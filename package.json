@@ -1,6 +1,6 @@
 {
   "name": "@citadel-app/excalidraw",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "description": "Whiteboard and diagramming with Excalidraw for Citadel.",
   "author": "Citadel Team",
   "license": "MIT",
@@ -9,7 +9,7 @@
     "url": "git+https://github.com/citadel-app/citadel-plugin-excalidraw.git"
   },
   "engines": {
-    "citadel": ">=1.2.1"
+    "citadel": ">=1.2.3"
   },
   "citadel": {
     "title": "Whiteboard",
@@ -28,8 +28,10 @@
   },
   "scripts": {
     "dev": "vite build --watch",
-    "build": "vite build",
-    "generate:marketplace": "node scripts/generate-marketplace-manifest.js"
+    "build": "npm run build:main && npm run build:renderer",
+    "generate:marketplace": "node scripts/generate-marketplace-manifest.js",
+    "build:main": "vite build --mode main",
+    "build:renderer": "vite build --mode renderer"
   },
   "dependencies": {
     "@excalidraw/excalidraw": "*",
@@ -45,9 +47,9 @@
     "react-router-dom": "*"
   },
   "devDependencies": {
-    "@citadel-app/core": "^1.2.1",
-    "@citadel-app/sdk": "^1.2.1",
-    "@citadel-app/ui": "^1.2.1",
+    "@citadel-app/core": "^1.2.3",
+    "@citadel-app/sdk": "^1.2.3",
+    "@citadel-app/ui": "^1.2.3",
     "@types/lodash": "^4.17.0",
     "@types/node": "^25.5.0",
     "@types/react": "^18.3.11",
